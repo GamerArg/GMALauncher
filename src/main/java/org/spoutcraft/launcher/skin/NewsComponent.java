@@ -22,12 +22,18 @@ import net.technicpack.launchercore.restful.PlatformConstants;
 import net.technicpack.launchercore.restful.RestObject;
 import net.technicpack.launchercore.restful.platform.Article;
 import net.technicpack.launchercore.restful.platform.News;
+import net.technicpack.launchercore.util.ResourceUtils;
 import net.technicpack.launchercore.util.Utils;
 import org.spoutcraft.launcher.skin.components.HyperlinkJTextPane;
+import org.spoutcraft.launcher.skin.components.ImageHyperlinkButton;
 import org.spoutcraft.launcher.skin.components.RoundedBox;
 
+import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JTextArea;
+
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.util.List;
@@ -52,25 +58,44 @@ public class NewsComponent extends JComponent {
 	}
 
 	private void setupArticles(List<Article> articles) {
-		Font articleFont = LauncherFrame.getMinecraftFont(10);
+		Font articleFont = LauncherFrame.getUbuntuFont(10);
 		int width = getWidth() - 16;
-		int height = getHeight() / 2 - 16;
+		int height = (getHeight()-50) / 5 - 16;
 
-		for (int i = 0; i < 2; i++) {
+		for (int i = 0; i < 6; i++) {
 			Article article = articles.get(i);
 			String date = article.getDate();
 			String title = article.getDisplayTitle();
-			HyperlinkJTextPane link = new HyperlinkJTextPane(date + "\n" + title, article.getUrl());
+			
+			HyperlinkJTextPane link = new HyperlinkJTextPane("(" + date + ") " + title, article.getUrl());
 			link.setFont(articleFont);
 			link.setForeground(Color.WHITE);
 			link.setBackground(new Color(255, 255, 255, 0));
-			link.setBounds(8, 8 + ((height + 8) * i), width, height);
+			link.setBounds(8, 8 + ((height + 8) * i), width, 32);
+			link.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			
+			JTextArea summaryText = new JTextArea();
+			summaryText.setText(article.getSummary());
+			summaryText.setEditable(false);
+			summaryText.setFont(articleFont);
+			summaryText.setBounds(22, 8*3 + ((height + 8) * i), width-15, height-10);
+			summaryText.setLineWrap(true);
+			summaryText.setOpaque(false);
+			summaryText.setForeground(Color.GRAY);			
+			
+			this.add(summaryText);
 			this.add(link);
 		}
-
-		RoundedBox background = new RoundedBox(LauncherFrame.TRANSPARENT);
-		background.setBounds(0, 0, getWidth(), getHeight());
-		this.add(background);
+		
+		JButton newsLink = new ImageHyperlinkButton("http://gamerarg.com.ar/foro");
+		newsLink.setBounds(76, getHeight()-40, width + 24, 40);
+		newsLink.setIcon(ResourceUtils.getIcon("button_news.png"));
+		newsLink.setRolloverIcon(ResourceUtils.getIcon("hover_button_news.png"));
+		newsLink.setContentAreaFilled(false);
+		newsLink.setBorderPainted(false);
+		newsLink.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		
+		this.add(newsLink);
 		this.repaint();
 	}
 }
