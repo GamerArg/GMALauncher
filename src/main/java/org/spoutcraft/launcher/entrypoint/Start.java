@@ -57,6 +57,8 @@ public class Start {
 		}
 
 		Directories.instance = new LauncherDirectories();
+		System.setProperty("awt.useSystemAAFontSettings","on");
+		System.setProperty("swing.aatext", "true");
 
 		// Test for exe relaunch
 		SpoutcraftLauncher.setupLogger().info("Args: " + Arrays.toString(args));
