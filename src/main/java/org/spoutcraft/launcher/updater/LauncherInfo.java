@@ -25,7 +25,9 @@ import net.technicpack.launchercore.restful.RestObject;
 public class LauncherInfo {
 
 	public static int getLatestBuild(String stream) throws RestfulAPIException{
-		LauncherBuild result = RestObject.getRestObject(LauncherBuild.class, PlatformConstants.API + "launcher/version/" + stream);
+		//TODO: Group all the URLs.
+		//LauncherBuild result = RestObject.getRestObject(LauncherBuild.class, PlatformConstants.API + "launcher/version/" + stream);
+		LauncherBuild result = RestObject.getRestObject(LauncherBuild.class, "http://gamerarg.com.ar/MCLauncher/version.php");
 		return result.getLatestBuild();
 	}
 
