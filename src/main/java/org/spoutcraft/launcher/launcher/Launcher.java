@@ -71,7 +71,7 @@ public class Launcher {
 		AvailablePackList packList = new AvailablePackList(installedPacks, mirrorStore);
 		userModel.addAuthListener(packList);
 
-		DonorSite donors = new DonorSite("http://donate.technicpack.net/");
+		DonorSite donors = new DonorSite("http://gamerarg.com.ar/donar");
 
 		this.launcherFrame = new LauncherFrame(skinRepo, userModel, packList, donors, mirrorStore);
 		this.loginFrame = new LoginFrame(skinRepo, userModel);
@@ -106,7 +106,7 @@ public class Launcher {
 		instance.installThread = new InstallThread(user, pack, build, instance.userModel, instance.mirrorStore);
 		instance.installThread.start();
 	}
-
+	
 	public static boolean isLaunching() {
 		return instance.installThread != null && !instance.installThread.isFinished();
 	}
