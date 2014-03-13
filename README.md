@@ -5,7 +5,7 @@ GMA Launcher
 The GMA Launcher is a Minecraft launcher designed to install the current version of Minecraft that GamerArg servers run. It's based purelly on TechnicLauncher wich can be founded on the [Technic Platform][Homepage] page. This launcher, as the original, can only be used by premium Minecraft users.
 
 ## The License
-The Technic Launcher is licensed under the [GNU General Public License Version 3][License]. Please see the `LICENSE.txt` file for details.
+The GMA Launcher is licensed under the [GNU General Public License Version 3][License]. Please see the `LICENSE.txt` file for details.
 
 Copyright (c) 2014 GamerArg
 
