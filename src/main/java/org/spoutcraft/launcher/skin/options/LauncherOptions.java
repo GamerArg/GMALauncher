@@ -45,6 +45,7 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -60,8 +61,8 @@ import net.technicpack.launchercore.util.LaunchAction;
 public class LauncherOptions extends JDialog implements ActionListener, MouseListener, MouseMotionListener {
 	private static final long serialVersionUID = 1L;
 	private static final int FRAME_WIDTH = 300;
-	private static final int FRAME_HEIGHT = 300;
-	private static final String LAUNCHER_PREPEND = "Launcher Build:    ";
+	private static final int FRAME_HEIGHT = 238;
+	private static final String LAUNCHER_PREPEND = "Version:    ";
 	private static final String QUIT_ACTION = "quit";
 	private static final String SAVE_ACTION = "save";
 	private static final String LOGS_ACTION = "logs";
@@ -99,6 +100,8 @@ public class LauncherOptions extends JDialog implements ActionListener, MouseLis
 
 	private void initComponents() {
 		Font minecraft = LauncherFrame.getMinecraftFont(12);
+		Font ubuntu = LauncherFrame.getUbuntuFont(12);
+		Font orbitron = LauncherFrame.getOrbitronMediumFont(12);
 
 		KeyStroke escape = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, false);
 		Action escapeAction = new AbstractAction() {
@@ -115,24 +118,27 @@ public class LauncherOptions extends JDialog implements ActionListener, MouseLis
 
 		background = new JLabel();
 		background.setBounds(0, 0, FRAME_WIDTH, FRAME_HEIGHT);
-		LauncherFrame.setIcon(background, "optionsBackground.png", background.getWidth(), background.getHeight());
+		LauncherFrame.setIcon(background, "options_background.png", background.getWidth(), background.getHeight());
 
-		ImageButton optionsQuit = new ImageButton(ResourceUtils.getIcon("quit.png", 28, 28), ResourceUtils.getIcon("quit.png", 28, 28));
-		optionsQuit.setRolloverIcon(ResourceUtils.getIcon("quitHover.png", 28, 28));
-		optionsQuit.setBounds(FRAME_WIDTH - 38, 10, 28, 28);
+		ImageButton optionsQuit = new ImageButton(ResourceUtils.getIcon("close.png", 20, 18), ResourceUtils.getIcon("hover_close.png", 20, 18));
+		optionsQuit.setRolloverIcon(ResourceUtils.getIcon("hover_close.png", 20, 18));
+		optionsQuit.setBounds(FRAME_WIDTH - 22, 12, 20, 18);
 		optionsQuit.setActionCommand(QUIT_ACTION);
 		optionsQuit.addActionListener(this);
+		optionsQuit.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		optionsQuit.setToolTipText("Cerrar");
 
-		JLabel title = new JLabel("Launcher Options");
-		title.setFont(minecraft.deriveFont(14F));
+		JLabel title = new JLabel("Opciones");
+		title.setFont(orbitron.deriveFont(14F));
 		title.setBounds(50, 10, 200, 20);
 		title.setForeground(Color.WHITE);
 		title.setHorizontalAlignment(SwingConstants.CENTER);
 
 		build = new JLabel(LAUNCHER_PREPEND + SpoutcraftLauncher.getLauncherBuild());
-		build.setBounds(15, title.getY() + title.getHeight() + 10, FRAME_WIDTH - 20, 20);
-		build.setFont(minecraft);
+		build.setBounds(10, title.getY() + title.getHeight() + 10, FRAME_WIDTH - 20, 20);
+		build.setFont(ubuntu);
 		build.setForeground(Color.WHITE);
+		build.setHorizontalAlignment(SwingConstants.LEFT);
 
 		ButtonGroup group = new ButtonGroup();
 
@@ -166,73 +172,82 @@ public class LauncherOptions extends JDialog implements ActionListener, MouseLis
 			beta.setSelected(true);
 		}
 
-		JLabel memoryLabel = new JLabel("Memory: ");
-		memoryLabel.setFont(minecraft);
-		memoryLabel.setBounds(10, beta.getY() + beta.getHeight() + 10, 65, 20);
+		JLabel memoryLabel = new JLabel("Memoria: ");
+		memoryLabel.setFont(ubuntu);
+		memoryLabel.setBounds(10, build.getY() + build.getHeight() + 10, 100, 20);
 		memoryLabel.setForeground(Color.WHITE);
-		memoryLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		memoryLabel.setHorizontalAlignment(SwingConstants.LEFT);
 
 		memory = new JComboBox();
-		memory.setBounds(memoryLabel.getX() + memoryLabel.getWidth() + 10, memoryLabel.getY(), 100, 20);
+		memory.setBounds(memoryLabel.getX() + memoryLabel.getWidth() + 10, memoryLabel.getY(), 145, 20);
+		memory.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		populateMemory(memory);
 
-		JLabel onLaunchLabel = new JLabel("On Pack Launch: ");
-		onLaunchLabel.setFont(minecraft);
-		onLaunchLabel.setBounds(10, memoryLabel.getY() + memoryLabel.getHeight() + 10, 125, 20);
+		JLabel onLaunchLabel = new JLabel("En el arranque: ");
+		onLaunchLabel.setFont(ubuntu);
+		onLaunchLabel.setBounds(10, memoryLabel.getY() + memoryLabel.getHeight() + 10, 100, 20);
 		onLaunchLabel.setForeground(Color.WHITE);
-		onLaunchLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		onLaunchLabel.setHorizontalAlignment(SwingConstants.LEFT);
 
 		onLaunch = new JComboBox();
 		onLaunch.setBounds(onLaunchLabel.getX() + onLaunchLabel.getWidth() + 10, onLaunchLabel.getY(), 145, 20);
+		onLaunch.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		populateOnLaunch(onLaunch);
 
 		installedDirectory = Settings.getDirectory();
 
 		packLocation = new LiteTextBox(this, "");
 		packLocation.setBounds(10, onLaunchLabel.getY() + onLaunchLabel.getHeight() + 10, FRAME_WIDTH - 20, 25);
-		packLocation.setFont(minecraft.deriveFont(10F));
+		packLocation.setFont(ubuntu.deriveFont(10F));
 		packLocation.setText(installedDirectory);
 		packLocation.setEnabled(false);
+		packLocation.setBackground(Color.BLACK);
+		packLocation.setForeground(Color.WHITE);
+		packLocation.setBorder(null);
 
-		LiteButton changeFolder = new LiteButton("Change Folder");
+		LiteButton changeFolder = new LiteButton("Cambiar carpeta");
 		changeFolder.setBounds(FRAME_WIDTH / 2 + 5, packLocation.getY() + packLocation.getHeight() + 10, FRAME_WIDTH / 2 - 15, 25);
-		changeFolder.setFont(minecraft);
+		changeFolder.setFont(ubuntu.deriveFont(14F));
 		changeFolder.setActionCommand(CHANGEFOLDER_ACTION);
 		changeFolder.addActionListener(this);
 		changeFolder.setEnabled(!SpoutcraftLauncher.params.isPortable());
+		changeFolder.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
 		logs = new LiteButton("Logs");
-		logs.setFont(minecraft.deriveFont(14F));
+		logs.setFont(ubuntu.deriveFont(14F));
 		logs.setBounds(10, packLocation.getY() + packLocation.getHeight() + 10, FRAME_WIDTH / 2 - 15, 25);
 		logs.setForeground(Color.WHITE);
 		logs.setActionCommand(LOGS_ACTION);
 		logs.addActionListener(this);
+		logs.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
-		LiteButton save = new LiteButton("Save");
-		save.setFont(minecraft.deriveFont(14F));
-		save.setBounds(FRAME_WIDTH / 2 + 5, logs.getY() + logs.getHeight() + 10, FRAME_WIDTH / 2 - 15, 25);
+		LiteButton save = new LiteButton("Guardar");
+		save.setFont(ubuntu.deriveFont(14F));
+		save.setBounds(10, logs.getY() + logs.getHeight() + 10, FRAME_WIDTH - 20, 25);
 		save.setActionCommand(SAVE_ACTION);
 		save.addActionListener(this);
+		save.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
 		consoleToggle = Settings.getShowConsole();
-		console = new LiteButton(consoleToggle ? "Hide Console" : "Show Console");
-		console.setFont(minecraft.deriveFont(14F));
+		console = new LiteButton(consoleToggle ? "Esconder consola" : "Mostrar consola");
+		console.setFont(ubuntu.deriveFont(14F));
 		console.setBounds(10, logs.getY() + logs.getHeight() + 10, FRAME_WIDTH / 2 - 15, 25);
 		console.setForeground(Color.WHITE);
 		console.setActionCommand(CONSOLE_ACTION);
 		console.addActionListener(this);
+		console.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
 		fileChooser = new JFileChooser(Utils.getLauncherDirectory());
 		fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
 		Container contentPane = getContentPane();
 		contentPane.add(build);
-		contentPane.add(beta);
-		contentPane.add(stable);
+		//contentPane.add(beta);
+		//contentPane.add(stable);
 		contentPane.add(changeFolder);
 		contentPane.add(packLocation);
 		contentPane.add(logs);
-		contentPane.add(console);
+		//contentPane.add(console);
 		contentPane.add(optionsQuit);
 		contentPane.add(title);
 		contentPane.add(memory);
@@ -335,7 +350,7 @@ public class LauncherOptions extends JDialog implements ActionListener, MouseLis
 			}
 
 			if (directoryChanged || streamChanged) {
-				JOptionPane.showMessageDialog(c, "A manual restart is required for changes to take effect. Please exit and restart your launcher.", "Restart Required", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(c, "Un reinicio manual del launcher es requerido para que los cambios tomen efecto. Porfavor, reinicialo.", "Reinicio requerido", JOptionPane.INFORMATION_MESSAGE);
 				dispose();
 			}
 			dispose();
@@ -350,14 +365,14 @@ public class LauncherOptions extends JDialog implements ActionListener, MouseLis
 			} else {
 				SpoutcraftLauncher.destroyConsole();
 			}
-			console.setText(consoleToggle ? "Hide Console" : "Show Console");
+			console.setText(consoleToggle ? "Esconder consola" : "Mostrar consola");
 		} else if (action.equals(CHANGEFOLDER_ACTION)) {
 			int result = fileChooser.showOpenDialog(this);
 
 			if (result == JFileChooser.APPROVE_OPTION) {
 				File file = fileChooser.getSelectedFile();
 				if (!ZipUtils.checkLaunchDirectory(file)) {
-					JOptionPane.showMessageDialog(c, "Please select an empty directory, or your default install folder with settings.json in it.", "Invalid Location", JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(c, "Porfavor selecciona un directorio vacio.", "Ubicacion invalida", JOptionPane.WARNING_MESSAGE);
 					return;
 				}
 				packLocation.setText(file.getPath());
