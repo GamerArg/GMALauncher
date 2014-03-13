@@ -56,6 +56,8 @@ import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Frame;
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -63,7 +65,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 
 import static net.technicpack.launchercore.util.ResourceUtils.getResourceAsStream;
@@ -77,6 +81,7 @@ public class LauncherFrame extends JFrame implements ActionListener, KeyListener
 	private static final String PACK_OPTIONS_ACTION = "packoptions";
 	private static final String PACK_REMOVE_ACTION = "packremove";
 	private static final String EXIT_ACTION = "exit";
+	private static final String MINIMIZE_ACTION = "minimize";
 	private static final String PACK_LEFT_ACTION = "packleft";
 	private static final String PACK_RIGHT_ACTION = "packright";
 	private static final String LAUNCH_ACTION = "launch";
@@ -92,7 +97,7 @@ public class LauncherFrame extends JFrame implements ActionListener, KeyListener
 	private ImageButton packRemoveBtn;
 	private ImageHyperlinkButton platform;
 	private JLabel customName;
-	private LiteButton launch;
+	private ImageButton launch;
 	private JLabel userHead;
 	private JLabel loggedInMsg;
 	private LiteButton logout;
@@ -127,6 +132,12 @@ public class LauncherFrame extends JFrame implements ActionListener, KeyListener
 		getContentPane().add(packBackground);
 		this.setUndecorated(true);
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		
+		this.setTitle("GamerArg Minecraft");
+		InputStream iconStream = getResourceAsStream("/org/spoutcraft/launcher/resources/icon.png");
+		try {
+			this.setIconImage(ImageIO.read(iconStream));
+		} catch (IOException e) {}
 	}
 
 	public void skinReady(User user) { }
@@ -136,41 +147,37 @@ public class LauncherFrame extends JFrame implements ActionListener, KeyListener
 	}
 
 	private void initComponents(AvailablePackList packList) {
+		Font orbitron = getOrbitronMediumFont(12);
 		Font minecraft = getMinecraftFont(12);
 		Font ready = getMinecraftFont(10);
 
-		// Launch button area
-		RoundedBox launchArea = new RoundedBox(TRANSPARENT);
-		launchArea.setBounds(605, 375, 265, 50);
-
-		launch = new LiteButton("PLAY");
-		launch.setFont(getMinecraftFont(20));
-		launch.setBounds(launchArea.getX()+5, launchArea.getY()+5, launchArea.getWidth()-10, launchArea.getHeight()-10);
+		// Launch button
+		ImageButton launch = new ImageButton(ResourceUtils.getIcon("play.png", 170, 71), ResourceUtils.getIcon("hover_play.png", 170, 71));
+		launch.setPressedIcon(ResourceUtils.getIcon("pressed_play.png"));
+		launch.setBounds(FRAME_WIDTH-174, FRAME_HEIGHT-73, 170, 71);
 		launch.setActionCommand(LAUNCH_ACTION);
+		launch.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		launch.addActionListener(this);
 
 		// User info area
-		RoundedBox userArea = new RoundedBox(TRANSPARENT);
-		userArea.setBounds(605, 430, 265, 75);
+		JLabel userArea = new JLabel();
+		userArea.setBounds(698, 155, 173, 75);
+		userArea.setIcon(ResourceUtils.getIcon("profile.png", 173, 38));
 
 		userHead = new JLabel();
-		userHead.setBounds(userArea.getX() + userArea.getWidth() - 69, userArea.getY() + 13, 48, 48);
+		userHead.setBounds(userArea.getX() + userArea.getWidth() - 53, userArea.getY() + 20, 48, 48);
 		userHead.setIcon(new ImageIcon(ImageUtils.scaleImage(this.mSkinRepo.getDefaultFace(), 48, 48)));
 
 		loggedInMsg = new JLabel("");
-		loggedInMsg.setFont(minecraft);
-		loggedInMsg.setHorizontalAlignment(SwingConstants.RIGHT);
-		loggedInMsg.setHorizontalTextPosition(SwingConstants.RIGHT);
-		loggedInMsg.setBounds(userArea.getX() + 5, userArea.getY() + 8, 185, 30);
+		loggedInMsg.setFont(orbitron);
+		loggedInMsg.setBounds(userArea.getX() + 12, userArea.getY() + 15, 113, 30);
 		loggedInMsg.setForeground(Color.white);
 
-		logout = new LiteButton("Log Out", new Color(0,0,0,0), new Color(0,0,0,0), new Color(0,0,0,0), Color.white, Color.white, Color.white);
-		logout.setFont(minecraft);
+		logout = new LiteButton("Salir", new Color(0,0,0,0), new Color(0,0,0,0), new Color(0,0,0,0), Color.white, Color.white, Color.white);
+		logout.setFont(orbitron);
 		logout.setOpaque(false);
-		logout.setHorizontalAlignment(SwingConstants.RIGHT);
-		logout.setHorizontalTextPosition(SwingConstants.RIGHT);
 		logout.setForeground(Color.white);
-		logout.setBounds(userArea.getX() + 133, userArea.getY() + 32, 60, 30);
+		logout.setBounds(userArea.getX(), userArea.getY() + 27, 60, 30);
 		logout.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		logout.setActionCommand(LOGOUT);
 		logout.addActionListener(this);
@@ -179,7 +186,7 @@ public class LauncherFrame extends JFrame implements ActionListener, KeyListener
 		JLabel logo = new JLabel();
 		ImageIcon logoIcon = new ImageIcon(ImageUtils.scaleWithAspectWidth(ResourceUtils.getImage("header.png"), 275));
 		logo.setIcon(logoIcon);
-		logo.setBounds(600, 6, logoIcon.getIconWidth(), logoIcon.getIconHeight());
+		logo.setBounds(10, 6, logoIcon.getIconWidth(), logoIcon.getIconHeight());
 
 		// Pack Selector Background
 		JLabel selectorBackground = new JLabel();
@@ -202,60 +209,82 @@ public class LauncherFrame extends JFrame implements ActionListener, KeyListener
 		// Progress Bar Background box
 		barBox = new RoundedBox(TRANSPARENT);
 		barBox.setVisible(false);
-		barBox.setBounds(605, 205, 265, 35);
+		barBox.setBounds(FRAME_WIDTH-170, FRAME_HEIGHT-120, 160, 35);
 
 		// Progress Bar
 		progressBar = new LiteProgressBar(this);
-		progressBar.setBounds(barBox.getX() + SPACING, barBox.getY() + SPACING, barBox.getWidth() - (SPACING * 2), barBox.getHeight() - (SPACING * 2));
+		progressBar.setBounds(FRAME_WIDTH-160, FRAME_HEIGHT-117, 150, 20);
 		progressBar.setVisible(false);
 		progressBar.setStringPainted(true);
 		progressBar.setOpaque(true);
-		progressBar.setFont(minecraft);
+		progressBar.setFont(orbitron);
 
 		// News Items
 		news = new NewsComponent();
-		news.setBounds(barBox.getX(), logo.getY() + logo.getHeight(), barBox.getWidth(), 100);
+		news.setBounds(50, 155, 280, 306);
 
 		// Link background box
-		RoundedBox linkArea = new RoundedBox(TRANSPARENT);
-		linkArea.setBounds(605, 250, 265, 120);
+		int linkAreaX = 651;
+		int linkAreaY = 250;
+		int linkAreaWith = 265;
+		int linkAreaHeight = 120;
 
-		int linkWidth = linkArea.getWidth() - (SPACING * 2);
-		int linkHeight = (linkArea.getHeight() - (SPACING * 4)) / 3;
-
-		// Browse link
-		JButton browse = new ImageHyperlinkButton("http://www.technicpack.net");
-		browse.setToolTipText("Get More Modpacks");
-		browse.setBounds(linkArea.getX() + SPACING, linkArea.getY() + SPACING, linkWidth, linkHeight);
-		browse.setIcon(ResourceUtils.getIcon("platformLinkButton.png"));
-		browse.setRolloverIcon(ResourceUtils.getIcon("platformLinkButtonBright.png"));
-		browse.setContentAreaFilled(false);
-		browse.setBorderPainted(false);
-
-		// Forums link
-		JButton forums = new ImageHyperlinkButton("http://forums.technicpack.net/");
-		forums.setToolTipText("Visit the forums");
-		forums.setBounds(linkArea.getX() + SPACING, browse.getY() + browse.getHeight() + SPACING, linkWidth, linkHeight);
-		forums.setIcon(ResourceUtils.getIcon("forumsLinkButton.png"));
-		forums.setRolloverIcon(ResourceUtils.getIcon("forumsLinkButtonBright.png"));
-		forums.setContentAreaFilled(false);
-		forums.setBorderPainted(false);
-
+		int linkWidth = linkAreaWith - (SPACING * 2);
+		int linkHeight = (linkAreaHeight - (SPACING * 4)) / 3;
+		
 		// Donate link
-		JButton donate = new ImageHyperlinkButton("http://www.technicpack.net/donate/");
-		donate.setToolTipText("Donate to the modders");
-		donate.setBounds(linkArea.getX() + SPACING, forums.getY() + forums.getHeight() + SPACING, linkWidth, linkHeight);
-		donate.setIcon(ResourceUtils.getIcon("donateLinkButton.png"));
-		donate.setRolloverIcon(ResourceUtils.getIcon("donateLinkButtonBright.png"));
+		JButton donate = new ImageHyperlinkButton("http://www.gamerarg.com.ar/donar/");
+		donate.setBounds(linkAreaX + SPACING, linkAreaY + SPACING, linkWidth, linkHeight);
+		donate.setIcon(ResourceUtils.getIcon("button_donate.png"));
+		donate.setRolloverIcon(ResourceUtils.getIcon("hover_button_donate.png"));
 		donate.setContentAreaFilled(false);
 		donate.setBorderPainted(false);
+		donate.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
+		// Forums link
+		JButton forums = new ImageHyperlinkButton("http://gamerarg.com.ar/foro");
+		forums.setBounds(linkAreaX + SPACING, donate.getY() + donate.getHeight() + SPACING, linkWidth, linkHeight);
+		forums.setIcon(ResourceUtils.getIcon("button_forum.png"));
+		forums.setRolloverIcon(ResourceUtils.getIcon("hover_button_forum.png"));
+		forums.setContentAreaFilled(false);
+		forums.setBorderPainted(false);
+		forums.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		
+		// Browse link
+		JButton browse = new ImageHyperlinkButton("http://gamerarg.com.ar");
+		browse.setBounds(linkAreaX + SPACING, forums.getY() + forums.getHeight() + SPACING, linkWidth, linkHeight);
+		browse.setIcon(ResourceUtils.getIcon("button_web.png"));
+		browse.setRolloverIcon(ResourceUtils.getIcon("hover_button_web.png"));
+		browse.setContentAreaFilled(false);
+		browse.setBorderPainted(false);
+		browse.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		
+		int controlsY = 16;
+		
+		// Exit Button
+		ImageButton exit = new ImageButton(ResourceUtils.getIcon("close.png", 20, 18), ResourceUtils.getIcon("hover_close.png", 20, 18));
+		exit.setBounds(FRAME_WIDTH - 29, controlsY, 20, 18);
+		exit.setActionCommand(EXIT_ACTION);
+		exit.addActionListener(this);
+		exit.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		exit.setToolTipText("Cerrar");
+		
+		// Minimize Button
+		ImageButton minimize = new ImageButton(ResourceUtils.getIcon("minimize.png", 20, 18), ResourceUtils.getIcon("hover_minimize.png", 20, 18));
+		minimize.setBounds(exit.getX() - 22, controlsY, 20, 18);
+		minimize.setActionCommand(MINIMIZE_ACTION);
+		minimize.addActionListener(this);
+		minimize.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		minimize.setToolTipText("Minimizar");
+		
 		// Options Button
-		ImageButton options = new ImageButton(ResourceUtils.getIcon("gear.png", 28, 28), ResourceUtils.getIcon("gearInverted.png", 28, 28));
-		options.setBounds(FRAME_WIDTH - 34 * 2, 6, 28, 28);
+		ImageButton options = new ImageButton(ResourceUtils.getIcon("options.png", 20, 18), ResourceUtils.getIcon("hover_options.png", 20, 18));
+		options.setBounds(minimize.getX() - 20, controlsY, 20, 18);
 		options.setActionCommand(OPTIONS_ACTION);
 		options.addActionListener(this);
 		options.addKeyListener(this);
+		options.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		options.setToolTipText("Opciones");
 
 		// Pack Options Button
 		packOptionsBtn = new ImageButton(ResourceUtils.getIcon("packOptions.png", 20, 20), ResourceUtils.getIcon("packOptionsInverted.png", 20, 20));
@@ -263,55 +292,16 @@ public class LauncherFrame extends JFrame implements ActionListener, KeyListener
 		packOptionsBtn.setActionCommand(PACK_OPTIONS_ACTION);
 		packOptionsBtn.addActionListener(this);
 
-		// Platform website button
-		platform = new ImageHyperlinkButton("http://www.technicpack.net/");
-		platform.setIcon(ResourceUtils.getIcon("openPlatformPage.png", 20, 20));
-		platform.setBounds(50, FRAME_HEIGHT / 2 + 56, 20, 20);
-
 		// Pack Remove Button
 		packRemoveBtn = new ImageButton(ResourceUtils.getIcon("packDelete.png", 20, 20), ResourceUtils.getIcon("packDeleteInverted.png", 20, 20));
 		packRemoveBtn.setBounds(185, FRAME_HEIGHT / 2 + 56, 20, 20);
 		packRemoveBtn.setActionCommand(PACK_REMOVE_ACTION);
 		packRemoveBtn.addActionListener(this);
 
-		// Exit Button
-		ImageButton exit = new ImageButton(ResourceUtils.getIcon("quit.png", 28, 28), ResourceUtils.getIcon("quitHover.png", 28, 28));
-		exit.setBounds(FRAME_WIDTH - 34, 6, 28, 28);
-		exit.setActionCommand(EXIT_ACTION);
-		exit.addActionListener(this);
-
-		// Steam button
-		JButton steam = new ImageHyperlinkButton("http://steamcommunity.com/groups/technic-pack");
-		steam.setRolloverIcon(ResourceUtils.getIcon("steamInverted.png", 28, 28));
-		steam.setToolTipText("Game with us on Steam");
-		steam.setBounds(215 + 6, 6, 28, 28);
-		setIcon(steam, "steam.png", 28);
-
-		// Twitter button
-		JButton twitter = new ImageHyperlinkButton("https://twitter.com/TechnicPack");
-		twitter.setRolloverIcon(ResourceUtils.getIcon("twitterInverted.png", 28, 28));
-		twitter.setToolTipText("Follow us on Twitter");
-		twitter.setBounds(215 + 6 + 34 * 3, 6, 28, 28);
-		setIcon(twitter, "twitter.png", 28);
-
-		// Facebook button
-		JButton facebook = new ImageHyperlinkButton("https://www.facebook.com/TechnicPack");
-		facebook.setRolloverIcon(ResourceUtils.getIcon("facebookInverted.png", 28, 28));
-		facebook.setToolTipText("Like us on Facebook");
-		facebook.setBounds(215 + 6 + 34 * 2, 6, 28, 28);
-		setIcon(facebook, "facebook.png", 28);
-
-		// YouTube button
-		JButton youtube = new ImageHyperlinkButton("http://www.youtube.com/user/kakermix");
-		youtube.setRolloverIcon(ResourceUtils.getIcon("youtubeInverted.png", 28, 28));
-		youtube.setToolTipText("Subscribe to our videos");
-		youtube.setBounds(215 + 6 + 34, 6, 28, 28);
-		setIcon(youtube, "youtube.png", 28);
-
 		Container contentPane = getContentPane();
 		contentPane.setLayout(null);
 
-		// Pack Selector
+		// Pack Selector -- Do not remove --
 		packSelector = new ModpackSelector(this, packList, mUserModel, mirrorStore);
 		packSelector.setBounds(15, 0, 200, 520);
 
@@ -323,33 +313,18 @@ public class LauncherFrame extends JFrame implements ActionListener, KeyListener
 		customName.setForeground(Color.white);
 
 		contentPane.add(launch);
-		contentPane.add(launchArea);
 		contentPane.add(userHead);
 		contentPane.add(loggedInMsg);
 		contentPane.add(logout);
 		contentPane.add(userArea);
 		contentPane.add(progressBar);
-		contentPane.add(barBox);
-		contentPane.add(packUp);
-		contentPane.add(packDown);
-		contentPane.add(customName);
-		contentPane.add(packOptionsBtn);
-		contentPane.add(packRemoveBtn);
-		contentPane.add(platform);
-		contentPane.add(packSelector);
-		contentPane.add(selectorBackground);
-		contentPane.add(steam);
-		contentPane.add(twitter);
-		contentPane.add(facebook);
-		contentPane.add(youtube);
 		contentPane.add(browse);
 		contentPane.add(forums);
 		contentPane.add(donate);
-		contentPane.add(linkArea);
-		contentPane.add(logo);
 		contentPane.add(news);
-		contentPane.add(options);
 		contentPane.add(exit);
+		contentPane.add(minimize);
+		contentPane.add(options);
 	}
 
 	private void setIcon(JButton button, String iconName, int size) {
@@ -358,6 +333,39 @@ public class LauncherFrame extends JFrame implements ActionListener, KeyListener
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static Font getOrbitronLightFont(int size) {
+		Font font;
+		try {
+			font = Font.createFont(Font.TRUETYPE_FONT, getResourceAsStream("/org/spoutcraft/launcher/resources/orbitron-light-webfont.ttf")).deriveFont((float) size);
+		} catch (Exception e) {
+			e.printStackTrace();
+			font = new Font("Arial", Font.PLAIN, size);
+		}
+		return font;
+	}
+	
+	public static Font getOrbitronMediumFont(int size) {
+		Font font;
+		try {
+			font = Font.createFont(Font.TRUETYPE_FONT, getResourceAsStream("/org/spoutcraft/launcher/resources/orbitron-medium-webfont.ttf")).deriveFont((float) size).deriveFont(1);
+		} catch (Exception e) {
+			e.printStackTrace();
+			font = new Font("Arial", Font.PLAIN, size);
+		}
+		return font;
+	}
+	
+	public static Font getUbuntuFont(int size) {
+		Font font;
+		try {
+			font = Font.createFont(Font.TRUETYPE_FONT, getResourceAsStream("/org/spoutcraft/launcher/resources/Ubuntu-Regular-webfont.ttf")).deriveFont((float) size);
+		} catch (Exception e) {
+			e.printStackTrace();
+			font = new Font("Arial", Font.PLAIN, size);
+		}
+		return font;
 	}
 
 	public static Font getMinecraftFont(int size) {
@@ -421,6 +429,8 @@ public class LauncherFrame extends JFrame implements ActionListener, KeyListener
 			}
 		} else if (action.equals(EXIT_ACTION)) {
 			System.exit(0);
+		} else if (action.equals(MINIMIZE_ACTION)) {
+			this.setState(Frame.ICONIFIED);
 		} else if (action.equals(PACK_LEFT_ACTION)) {
 			getSelector().selectPreviousPack();
 		} else if (action.equals(PACK_RIGHT_ACTION)) {
@@ -459,7 +469,7 @@ public class LauncherFrame extends JFrame implements ActionListener, KeyListener
 				if (text.length() > 60) {
 					text = text.substring(0, 60) + "...";
 				}
-				progressBar.setString(intProgress + "% " + text);
+				progressBar.setString(intProgress + "%");
 			}
 		});
 	}
@@ -477,14 +487,6 @@ public class LauncherFrame extends JFrame implements ActionListener, KeyListener
 	}
 
 	public void lockLoginButton(boolean unlock) {
-		if (unlock) {
-			if (currentUser != null && currentUser.isOffline())
-				launch.setText("PLAY OFFLINE");
-			else
-				launch.setText("PLAY");
-		} else {
-			launch.setText("LAUNCHING...");
-		}
 		launch.setEnabled(unlock);
 		packRemoveBtn.setEnabled(unlock);
 		packOptionsBtn.setEnabled(unlock);
@@ -515,15 +517,9 @@ public class LauncherFrame extends JFrame implements ActionListener, KeyListener
 			this.setVisible(false);
 			return;
 		}
-
-		if (currentUser.isOffline())
-			launch.setText("PLAY OFFLINE");
-		else {
-			launch.setText("PLAY");
+		
+		if (!currentUser.isOffline()) {
 			mUserModel.setLastUser(currentUser);
-
-//			if (mDonorSite.doesUserQualify(1, currentUser.getProfile().getName(), 5))
-//				this.bteamArea.setVisible(true);
 		}
 
 		loggedInMsg.setText(currentUser.getDisplayName());
