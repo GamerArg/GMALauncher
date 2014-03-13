@@ -1,7 +1,7 @@
 GMA Launcher
 ===================
 
-## What is The GMA Launcher?
+## What is the GMA Launcher?
 The GMA Launcher is a Minecraft launcher designed to install the current version of Minecraft that GamerArg servers run. It's based purelly on TechnicLauncher wich can be founded on the [Technic Platform][Homepage] page. This launcher, as the original, can only be used by premium Minecraft users.
 
 ## The License
