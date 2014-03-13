@@ -46,7 +46,7 @@ public class InstalledPacks implements IPackStore {
 		File installedPacks = new File(Utils.getSettingsDirectory(), "installedPacks");
 
 		InstalledPacks emptyList = new InstalledPacks();
-		emptyList.add(new AddPack());
+		//emptyList.add(new AddPack());
 
 		if (!installedPacks.exists()) {
 			Utils.getLogger().log(Level.WARNING, "Unable to load installedPacks from " + installedPacks + " because it does not exist.");
