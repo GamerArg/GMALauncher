@@ -10,25 +10,30 @@ import net.technicpack.launchercore.install.user.skins.SkinRepository;
 import net.technicpack.launchercore.util.ResourceUtils;
 import org.spoutcraft.launcher.skin.components.*;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.plaf.metal.MetalComboBoxUI;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collection;
 import java.util.Locale;
 
 import static net.technicpack.launchercore.util.ResourceUtils.getResourceAsStream;
 
 public class LoginFrame extends JFrame implements KeyListener, ActionListener, MouseListener, MouseMotionListener, IAuthListener {
-	public static final Color CHARCOAL = new Color(45, 45, 45);
-
+	public static final Color CHARCOAL = new Color(45, 45, 45);;
 	private JLabel nameLabel;
 	private JTextField name;
 	private JComboBox nameSelect;
 	private JLabel passLabel;
 	private JPasswordField pass;
-	private BlueButton login;
+	private JLabel serverPassLabel;
+	private JPasswordField serverPass;
+	private ImageButton login;
 	private JLabel background;
+	private JLabel bottom_border;
 	private JLabel platformImage;
 	private JLabel instructionText;
 	private JCheckBox rememberAccount;
@@ -49,7 +54,8 @@ public class LoginFrame extends JFrame implements KeyListener, ActionListener, M
 	private UserModel mUserModel;
 
 	private static final int FRAME_WIDTH = 347;
-	private static final int FRAME_HEIGHT = 411;
+	//private static final int FRAME_HEIGHT = 411;
+	private static final int FRAME_HEIGHT = 420;
 
 	private static final String CLOSE_ACTION = "close";
 	private static final String LOGIN_ACTION = "login";
@@ -73,6 +79,12 @@ public class LoginFrame extends JFrame implements KeyListener, ActionListener, M
 
 		this.addMouseListener(this);
 		this.addMouseMotionListener(this);
+		
+		this.setTitle("GamerArg Minecraft Login");
+		InputStream iconStream = getResourceAsStream("/org/spoutcraft/launcher/resources/icon.png");
+		try {
+			this.setIconImage(ImageIO.read(iconStream));
+		} catch (IOException e) {}
 
 		//Refresh users from Launcher.getUsers() on initial run
 		refreshUsers();
@@ -84,25 +96,25 @@ public class LoginFrame extends JFrame implements KeyListener, ActionListener, M
 	private void initComponents() {
 		Font largeFont = getFrameFont(17);
 		Font smallFont = getFrameFont(15);
-		Font veryLargeFont = getFrameFont(24);
+		Font veryLargeFont = getFrameFont(22);
 		Font verySmallFont = getFrameFont(13);
 
 		Container contentPane = getContentPane();
-		contentPane.setLayout(null);
+		contentPane.setLayout(null);		
 
 		//Logo at the top
 		platformImage = new JLabel();
 		LauncherFrame.setIcon(platformImage, "platform_logo.png", 305, 56);
 		platformImage.setBounds(21, 21, 305, 56);
 
-		instructionText = new JLabel("Please login using your Minecraft account");
+		instructionText = new JLabel("Ingresa utilizando tu cuenta de Mojang");
 		instructionText.setFont(smallFont);
-		instructionText.setBounds(28, 80, FRAME_WIDTH - 50, 30);
+		instructionText.setBounds(40, 75, FRAME_WIDTH - 50, 30);
 		instructionText.setForeground(Color.white);
 
-		nameLabel = new JLabel("Username");
+		nameLabel = new JLabel("Usuario o Email");
 		nameLabel.setFont(largeFont);
-		nameLabel.setBounds(25, 110, FRAME_WIDTH - 60, 30);
+		nameLabel.setBounds(25, 140, FRAME_WIDTH - 60, 30);
 		nameLabel.setForeground(Color.white);
 
 		// Setup username box
@@ -112,7 +124,7 @@ public class LoginFrame extends JFrame implements KeyListener, ActionListener, M
 			nameSelect.setUI(new MetalComboBoxUI());
 		}
 
-		nameSelect.setBounds(25, 140, 297, 32);
+		nameSelect.setBounds(25, 170, 297, 32);
 		nameSelect.setFont(largeFont);
 		nameSelect.setEditable(true);
 		nameSelect.setVisible(false);
@@ -125,88 +137,113 @@ public class LoginFrame extends JFrame implements KeyListener, ActionListener, M
 		nameSelect.setActionCommand(CHANGE_USER);
 
 		name = new JTextField();
-		name.setBounds(25, 140, 297, 30);
+		name.setBounds(25, 170, 297, 30);
 		name.setFont(largeFont);
 		name.addKeyListener(this);
 
-		passLabel = new JLabel("Password");
+		passLabel = new JLabel("Contraseña");
 		passLabel.setFont(largeFont);
-		passLabel.setBounds(25, 175, FRAME_WIDTH - 60, 30);
+		passLabel.setBounds(25, 205, FRAME_WIDTH - 60, 30);
 		passLabel.setForeground(Color.white);
-
+		
+		// 30 px per label
+		// 35 px per input
+		// 65 px per label and input
+		
 		// Setup password box
 		pass = new JPasswordField();
-		pass.setBounds(25, 205, 297, 30);
+		pass.setBounds(25, 235, 297, 30);
 		pass.setFont(largeFont);
 		pass.addKeyListener(this);
 		pass.setEchoChar('*');
 		pass.addActionListener(this);
 		pass.setActionCommand(LOGIN_ACTION);
+		
+		// Setup server password box
+		serverPassLabel = new JLabel("(Opcional) Contraseña del servidor");
+		serverPassLabel.setFont(largeFont);
+		serverPassLabel.setBounds(25, 240, FRAME_WIDTH - 60, 30);
+		serverPassLabel.setForeground(Color.white);
 
+		serverPass = new JPasswordField();
+		serverPass.setBounds(25, 270, 297, 30);
+		serverPass.setFont(largeFont);
+		serverPass.addKeyListener(this);
+		serverPass.setEchoChar('*');
+		serverPass.addActionListener(this);
+		serverPass.setActionCommand(LOGIN_ACTION);
+			
 		// "Remember this account"
-		rememberAccount = new JCheckBox("Remember this account", false);
+		rememberAccount = new JCheckBox("Recordar", false);
 		rememberAccount.setFont(smallFont);
 		rememberAccount.setForeground(Color.white);
 		rememberAccount.setOpaque(false);
-		rememberAccount.setBounds(25, 245, 300, 30);
+		rememberAccount.setBounds(25, 275, 300, 30);
 		rememberAccount.setHorizontalTextPosition(SwingConstants.LEFT);
 		rememberAccount.setHorizontalAlignment(SwingConstants.RIGHT);
-		rememberAccount.setIconTextGap(12);
+		rememberAccount.setIconTextGap(6);
 		rememberAccount.addActionListener(this);
 		rememberAccount.setActionCommand(TOGGLE_REMEMBER);
 		rememberAccount.addKeyListener(this);
+		rememberAccount.setFocusPainted(false);
 
 		//Login button
-		login = new BlueButton("LOGIN");
-		login.setFont(veryLargeFont);
-		login.setBounds(25, 290, FRAME_WIDTH - 50, 40);
+		ImageButton login = new ImageButton(ResourceUtils.getIcon("init_button_login.png", 241, 41), ResourceUtils.getIcon("init_hover_button_login.png", 241, 41));
+		login.setBounds(53, FRAME_HEIGHT - 100, 241, 41);
 		login.setActionCommand(LOGIN_ACTION);
+		login.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		login.addActionListener(this);
 
 		// Dash
 		dash = new JLabel("-");
 		dash.setFont(verySmallFont);
 		dash.setForeground(Color.white);
-		dash.setBounds((FRAME_WIDTH / 2) - 2, 375, 20, 20);
+		dash.setBounds(((int) (FRAME_WIDTH / 2)) - 5, FRAME_HEIGHT - 30, 20, 20);
 
 		//Terms of Service
-		tosLink = new HyperlinkJLabel("Terms of Service", "http://www.technicpack.net/terms");
+		tosLink = new HyperlinkJLabel("Terminos", "http://www.technicpack.net/terms");
 		tosLink.setFont(verySmallFont);
 		tosLink.setForeground(Color.white);
-		tosLink.setBounds(dash.getX() - 105, dash.getY(), 105, 20);
+		tosLink.setBounds(dash.getX() - 65, FRAME_HEIGHT - 30, 105, 20);
 		tosLink.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
 		//Privacy Policy
-		privacyPolicy = new HyperlinkJLabel("Privacy Policy", "http://www.technicpack.net/privacy");
+		privacyPolicy = new HyperlinkJLabel("Privacidad", "http://www.technicpack.net/privacy");
 		privacyPolicy.setFont(verySmallFont);
 		privacyPolicy.setForeground(Color.white);
-		privacyPolicy.setBounds(dash.getX() + 10, dash.getY(), 85, 20);
+		privacyPolicy.setBounds(dash.getX() + 10, FRAME_HEIGHT - 30, 85, 20);
 		privacyPolicy.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-
-		//Close button
-		closeButton = new ImageButton(ResourceUtils.getIcon("login_close.png"));
-		closeButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		closeButton.setBounds(FRAME_WIDTH - 28, 8, 20, 21);
+		
+		// Close Button
+		ImageButton closeButton = new ImageButton(ResourceUtils.getIcon("init_close.png", 14, 13), ResourceUtils.getIcon("init_hover_close.png", 14, 13));
+		closeButton.setBounds(FRAME_WIDTH - 15, 1, 14, 13);
 		closeButton.setActionCommand(CLOSE_ACTION);
 		closeButton.addActionListener(this);
+		closeButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
 		background = new JLabel();
-		background.setBounds(0, 0, FRAME_WIDTH, FRAME_HEIGHT);
-		LauncherFrame.setIcon(background, "login_background.png", background.getWidth(), background.getHeight());
+		background.setBounds(0, 0, FRAME_WIDTH, 722);
+		LauncherFrame.setIcon(background, "init_background.png", background.getWidth(), background.getHeight());
+		
+		bottom_border = new JLabel();
+		bottom_border.setBounds(1, FRAME_HEIGHT-60, 345, 60);
+		LauncherFrame.setIcon(bottom_border, "init_border_bottom.png", bottom_border.getWidth(), bottom_border.getHeight());
 
 		contentPane.add(closeButton);
-		contentPane.add(tosLink);
-		contentPane.add(privacyPolicy);
-		contentPane.add(dash);
+		//contentPane.add(tosLink);
+		//contentPane.add(privacyPolicy);
+		//contentPane.add(dash);
 		contentPane.add(login);
 		contentPane.add(rememberAccount);
 		contentPane.add(instructionText);
 		contentPane.add(nameLabel);
 		contentPane.add(passLabel);
+		//contentPane.add(serverPassLabel);
 		contentPane.add(name);
 		contentPane.add(nameSelect);
 		contentPane.add(pass);
-		contentPane.add(platformImage);
+		//contentPane.add(serverPass);
+		contentPane.add(bottom_border);
 		contentPane.add(background);
 	}
 
@@ -355,9 +392,10 @@ public class LoginFrame extends JFrame implements KeyListener, ActionListener, M
 	 * @return True if the launcher frame was successfully activated, false otherwise
 	 */
 	private boolean verifyExistingLogin(User user) {
+		
 		User loginUser = user;
 		boolean rejected = false;
-
+		
 		try {
 			UserModel.AuthError error = mUserModel.AttemptUserRefresh(user);
 			if (error != null) {
@@ -402,6 +440,7 @@ public class LoginFrame extends JFrame implements KeyListener, ActionListener, M
 			mUserModel.setCurrentUser(loginUser);
 			return true;
 		}
+		/**/
 	}
 
 	/**
@@ -411,23 +450,23 @@ public class LoginFrame extends JFrame implements KeyListener, ActionListener, M
 	 * @param username The username to auth with Mojang as.
 	 */
 	private void attemptNewLogin(String username) {
-
+		
 		AuthResponse response = null;
 		try {
 			//Attempt the log the user in with the data from this form
 			response = AuthenticationService.requestLogin(username, new String(this.pass.getPassword()), mUserModel.getClientToken());
-
             if (response == null) {
-                JOptionPane.showMessageDialog(this, "Invalid credentials. Invalid username or password.", "Auth Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Credenciales invalidas. Usuario o contraseña invalidos.", "Error de autentificacion", JOptionPane.ERROR_MESSAGE);
                 return;
             } else if (response.getError() != null) {
 				JOptionPane.showMessageDialog(this, response.getErrorMessage(), response.getError(), JOptionPane.ERROR_MESSAGE);
 				return;
 			}
+            
 		} catch (AuthenticationNetworkFailureException ex) {
 			//Login servers are inaccessible, but we only give the option to play offline with pre-cached users
 			ex.printStackTrace();
-			JOptionPane.showMessageDialog(this, "An error occurred while attempting to reach Minecraft.net", "Auth Servers Inaccessible", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, "No se ha podido conectar a Minecraft.net", "Error de conexion", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 
