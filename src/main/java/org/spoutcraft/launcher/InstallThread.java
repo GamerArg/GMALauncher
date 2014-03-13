@@ -71,7 +71,7 @@ public class InstallThread extends Thread {
 			MinecraftLauncher minecraftLauncher = new MinecraftLauncher(memory, pack, version);
 
 			StartupParameters params = SpoutcraftLauncher.params;
-			LaunchOptions options = new LaunchOptions( pack.getDisplayName(), pack.getIconPath(), params.getWidth(), params.getHeight(), params.getFullscreen());
+			LaunchOptions options = new LaunchOptions(pack.getDisplayName(), pack.getIconPath(), params.getWidth(), params.getHeight(), params.getFullscreen());
 			LauncherUnhider unhider = new LauncherUnhider();
 			minecraftLauncher.launch(user, options, unhider, mirrorStore);
 
