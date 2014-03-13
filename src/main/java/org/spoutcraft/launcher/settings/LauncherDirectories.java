@@ -44,7 +44,7 @@ public class LauncherDirectories extends Directories {
 
 	public File getSettingsDirectory() {
 		if (settingsDir == null) {
-			settingsDir = setupSettingsDir("technic");
+			settingsDir = setupSettingsDir("gamerarg");
 		}
 		return settingsDir;
 	}
@@ -106,7 +106,11 @@ public class LauncherDirectories extends Directories {
 	}
 
 	public File selectInstallDir(File workDir) {
-		int result = JOptionPane.showConfirmDialog(splash, "No installation of technic found. \n\nTechnic Launcher will install at: \n" + workDir.getAbsolutePath() + " \n\nWould you like to change the install directory?", "Install Technic Launcher", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
+		String[] options = new String[2];
+		options[0] = new String("Si");
+		options[1] = new String("No");
+		int result = JOptionPane.showOptionDialog(splash, "No se ha encontrado una instalacion del launcher. \n\nEl launcher se instalara en: \n" + workDir.getAbsolutePath() + " \n\nQuieres cambiar el directorio?",
+				"Instalar GMALauncher", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, null);
 		if (result == JOptionPane.YES_OPTION) {
 			JFileChooser fileChooser = new JFileChooser(workDir);
 			fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -115,7 +119,7 @@ public class LauncherDirectories extends Directories {
 			if (changeInst == JFileChooser.APPROVE_OPTION) {
 				workDir = fileChooser.getSelectedFile();
 				if (!ZipUtils.checkLaunchDirectory(workDir)) {
-					JOptionPane.showMessageDialog(splash, "Please select an empty directory, or your default install folder with settings.yml in it.", "Invalid Location", JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(splash, "Por favor selecciona un directorio vacio.", "Directorio invalido", JOptionPane.WARNING_MESSAGE);
 					return selectInstallDir(workDir);
 				}
 			}
