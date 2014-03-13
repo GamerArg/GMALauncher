@@ -121,61 +121,6 @@ public class ModpackSelector extends JComponent implements ActionListener, IPack
 	}
 
 	public void redraw(InstalledPack selected, boolean force) {
-		String packName = selected.getName();
-		String displayName = selected.getDisplayName();
-		// Determine if the pack is from the platform.
-		boolean custom = selected.isPlatform();
-
-		// Set the background image based on the pack
-		frame.getBackgroundImage().changeBackground(packName, selected.getBackground(), force);
-
-		// Set the icon image based on the pack
-		frame.setIconImage(selected.getIcon());
-
-		// Set the frame title based on the pack
-		frame.setTitle(displayName);
-
-		// Set the big button image in the middle
-		buttons.get(3).setPack(selected);
-
-		// Set the URL for the platform button
-		String url = "http://www.technicpack.net/modpack/details/" + packName;
-		if (selected.getInfo() instanceof SolderPackInfo && !custom) {
-			String newUrl = selected.getInfo().getUrl();
-			if (newUrl != null && !newUrl.isEmpty()) {
-				url = newUrl;
-				frame.enableComponent(frame.getPlatform(), true);
-			} else {
-				frame.enableComponent(frame.getPlatform(), false);
-			}
-		}
-		frame.getPlatform().setURL(url);
-
-		// Add the first 3 buttons to the left
-		for (int i = 0; i < 3; i++) {
-			InstalledPack pack = mPackList.getOffsetPack(-(i + 1));
-			buttons.get(i).setPack(pack);
-		}
-
-		// Add the last 3 buttons to the right
-		for (int i = 4; i < 7; i++) {
-			InstalledPack pack = mPackList.getOffsetPack(i - 3);
-			buttons.get(i).setPack(pack);
-		}
-
-		if (selected instanceof AddPack) {
-			frame.enableComponent(frame.getPackOptionsBtn(), false);
-			frame.enableComponent(frame.getPackRemoveBtn(), false);
-			frame.enableComponent(frame.getPlatform(), false);
-		} else if (custom) {
-			frame.enableComponent(frame.getPackOptionsBtn(), true);
-			frame.enableComponent(frame.getPackRemoveBtn(), true);
-			frame.enableComponent(frame.getPlatform(), true);
-		} else {
-			frame.enableComponent(frame.getPackOptionsBtn(), true);
-			frame.enableComponent(frame.getPackRemoveBtn(), false);
-		}
-
 		this.repaint();
 	}
 
