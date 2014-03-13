@@ -148,8 +148,6 @@ public class LauncherFrame extends JFrame implements ActionListener, KeyListener
 
 	private void initComponents(AvailablePackList packList) {
 		Font orbitron = getOrbitronMediumFont(12);
-		Font minecraft = getMinecraftFont(12);
-		Font ready = getMinecraftFont(10);
 
 		// Launch button
 		ImageButton launch = new ImageButton(ResourceUtils.getIcon("play.png", 170, 71), ResourceUtils.getIcon("hover_play.png", 170, 71));
@@ -182,29 +180,11 @@ public class LauncherFrame extends JFrame implements ActionListener, KeyListener
 		logout.setActionCommand(LOGOUT);
 		logout.addActionListener(this);
 
-		// Technic logo
-		JLabel logo = new JLabel();
-		ImageIcon logoIcon = new ImageIcon(ImageUtils.scaleWithAspectWidth(ResourceUtils.getImage("header.png"), 275));
-		logo.setIcon(logoIcon);
-		logo.setBounds(10, 6, logoIcon.getIconWidth(), logoIcon.getIconHeight());
-
 		// Pack Selector Background
 		JLabel selectorBackground = new JLabel();
 		selectorBackground.setBounds(15, 0, 200, 520);
 		selectorBackground.setBackground(TRANSPARENT);
 		selectorBackground.setOpaque(true);
-
-		// Pack Select Up
-		ImageButton packUp = new ImageButton(ResourceUtils.getIcon("upButton.png", 65, 65));
-		packUp.setBounds(-7, 0, 65, 65);
-		packUp.setActionCommand(PACK_LEFT_ACTION);
-		packUp.addActionListener(this);
-
-		// Pack Select Down
-		ImageButton packDown = new ImageButton(ResourceUtils.getIcon("downButton.png", 65, 65));
-		packDown.setBounds(-7, FRAME_HEIGHT - 65, 65, 65);
-		packDown.setActionCommand(PACK_RIGHT_ACTION);
-		packDown.addActionListener(this);
 
 		// Progress Bar Background box
 		barBox = new RoundedBox(TRANSPARENT);
@@ -286,31 +266,12 @@ public class LauncherFrame extends JFrame implements ActionListener, KeyListener
 		options.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		options.setToolTipText("Opciones");
 
-		// Pack Options Button
-		packOptionsBtn = new ImageButton(ResourceUtils.getIcon("packOptions.png", 20, 20), ResourceUtils.getIcon("packOptionsInverted.png", 20, 20));
-		packOptionsBtn.setBounds(25, FRAME_HEIGHT / 2 + 56, 20, 20);
-		packOptionsBtn.setActionCommand(PACK_OPTIONS_ACTION);
-		packOptionsBtn.addActionListener(this);
-
-		// Pack Remove Button
-		packRemoveBtn = new ImageButton(ResourceUtils.getIcon("packDelete.png", 20, 20), ResourceUtils.getIcon("packDeleteInverted.png", 20, 20));
-		packRemoveBtn.setBounds(185, FRAME_HEIGHT / 2 + 56, 20, 20);
-		packRemoveBtn.setActionCommand(PACK_REMOVE_ACTION);
-		packRemoveBtn.addActionListener(this);
-
 		Container contentPane = getContentPane();
 		contentPane.setLayout(null);
 
 		// Pack Selector -- Do not remove --
 		packSelector = new ModpackSelector(this, packList, mUserModel, mirrorStore);
 		packSelector.setBounds(15, 0, 200, 520);
-
-		// Custom Pack Name Label
-		customName = new JLabel("", JLabel.CENTER);
-		customName.setBounds(FRAME_WIDTH / 2 - (192 / 2), FRAME_HEIGHT / 2 + (110 / 2) - 30, 192, 30);
-		customName.setFont(minecraft.deriveFont(14F));
-		customName.setVisible(false);
-		customName.setForeground(Color.white);
 
 		contentPane.add(launch);
 		contentPane.add(userHead);
@@ -366,18 +327,6 @@ public class LauncherFrame extends JFrame implements ActionListener, KeyListener
 			font = new Font("Arial", Font.PLAIN, size);
 		}
 		return font;
-	}
-
-	public static Font getMinecraftFont(int size) {
-		Font minecraft;
-		try {
-			minecraft = Font.createFont(Font.TRUETYPE_FONT, getResourceAsStream("/org/spoutcraft/launcher/resources/minecraft.ttf")).deriveFont((float) size);
-		} catch (Exception e) {
-			e.printStackTrace();
-			// Fallback
-			minecraft = new Font("Arial", Font.PLAIN, 12);
-		}
-		return minecraft;
 	}
 
 	public static void setIcon(JLabel label, String iconName, int w, int h) {

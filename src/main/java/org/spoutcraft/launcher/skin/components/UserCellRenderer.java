@@ -37,7 +37,6 @@ import java.util.HashMap;
 
 public class UserCellRenderer extends JLabel implements ListCellRenderer, ISkinListener {
 	private Font textFont;
-	private Icon addUserIcon;
 
 	private SkinRepository mSkinRepo;
 
@@ -51,12 +50,6 @@ public class UserCellRenderer extends JLabel implements ListCellRenderer, ISkinL
 		this.mSkinRepo.addListener(this);
 		this.textFont = font;
 		setOpaque(true);
-
-		try {
-			addUserIcon = new ImageIcon(ImageUtils.scaleImage(ImageIO.read(ResourceUtils.getResourceAsStream("/org/spoutcraft/launcher/resources/add_user.png")), ICON_WIDTH, ICON_HEIGHT));
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		}
 	}
 
 	@Override
@@ -88,10 +81,6 @@ public class UserCellRenderer extends JLabel implements ListCellRenderer, ISkinL
 		} else if (value == null) {
 			this.setText("Add New User");
 			this.setIconTextGap(8);
-
-			if (addUserIcon != null) {
-				this.setIcon(addUserIcon);
-			}
 		} else {
 			this.setIconTextGap(0);
 			this.setText(value.toString());

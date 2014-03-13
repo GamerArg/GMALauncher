@@ -102,11 +102,6 @@ public class LoginFrame extends JFrame implements KeyListener, ActionListener, M
 		Container contentPane = getContentPane();
 		contentPane.setLayout(null);		
 
-		//Logo at the top
-		platformImage = new JLabel();
-		LauncherFrame.setIcon(platformImage, "platform_logo.png", 305, 56);
-		platformImage.setBounds(21, 21, 305, 56);
-
 		instructionText = new JLabel("Ingresa utilizando tu cuenta de Mojang");
 		instructionText.setFont(smallFont);
 		instructionText.setBounds(40, 75, FRAME_WIDTH - 50, 30);

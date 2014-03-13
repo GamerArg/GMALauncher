@@ -27,7 +27,7 @@ public class HexxitRain extends AnimatedImage {
 	private int y = 0;
 
 	public HexxitRain(int x, int startY) {
-		super(ResourceUtils.getIcon("rain.png"), 5);
+		super(ResourceUtils.getIcon("background.jpg"), 5);
 		this.x = x;
 		this.y = startY;
 	}

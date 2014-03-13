@@ -26,7 +26,7 @@ public class TekkitBackground extends EnhancedBackground {
 
 	public TekkitBackground() {
 		super("tekkitmain");
-		tekkit = new TekkitCreeper(650, 100, ResourceUtils.getIcon("creeper.png", 107, 69));
+		tekkit = new TekkitCreeper(650, 100, ResourceUtils.getIcon("background.jpg", 107, 69));
 		tekkit.setBounds(500, 100, 107, 69);
 		tekkit.setVisible(false);
 		this.add(tekkit);

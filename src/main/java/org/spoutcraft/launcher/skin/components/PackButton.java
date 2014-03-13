@@ -45,14 +45,13 @@ public class PackButton extends ImageButton {
 	public PackButton() {
 		super();
 		label = new JLabel("Loading...");
-		label.setFont(LauncherFrame.getMinecraftFont(12));
 		label.setForeground(Color.WHITE);
 		label.setBackground(new Color(35, 35, 35));
 		label.setOpaque(true);
 		label.setHorizontalAlignment(CENTER);
 
 		try {
-			disconnectedImage = ImageIO.read(ResourceUtils.getResourceAsStream("/org/spoutcraft/launcher/resources/offlinePack.png"));
+			disconnectedImage = ImageIO.read(ResourceUtils.getResourceAsStream("/org/spoutcraft/launcher/resources/close.png"));
 			disconnectedIcon = new ImageIcon(disconnectedImage.getScaledInstance(80,17,Image.SCALE_SMOOTH));
 		} catch (IOException ex) {
 			ex.printStackTrace();

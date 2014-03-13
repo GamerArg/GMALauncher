@@ -31,6 +31,10 @@ public abstract class AnimatedImage extends JLabel implements ActionListener {
 		timer = new Timer(delay, this);
 	}
 
+	public AnimatedImage() {
+		timer = new Timer(0, this);
+	}
+
 	public void setAnimating(boolean animate) {
 		if (animate) {
 			timer.start();

@@ -99,7 +99,6 @@ public class LauncherOptions extends JDialog implements ActionListener, MouseLis
 	}
 
 	private void initComponents() {
-		Font minecraft = LauncherFrame.getMinecraftFont(12);
 		Font ubuntu = LauncherFrame.getUbuntuFont(12);
 		Font orbitron = LauncherFrame.getOrbitronMediumFont(12);
 
@@ -139,38 +138,6 @@ public class LauncherOptions extends JDialog implements ActionListener, MouseLis
 		build.setFont(ubuntu);
 		build.setForeground(Color.WHITE);
 		build.setHorizontalAlignment(SwingConstants.LEFT);
-
-		ButtonGroup group = new ButtonGroup();
-
-		stable = new JRadioButton("Always use Stable Launcher Builds");
-		stable.setBounds(10, build.getY() + build.getHeight() + 10, FRAME_WIDTH - 20, 20);
-		stable.setFont(minecraft);
-		stable.setForeground(Color.WHITE);
-		stable.setContentAreaFilled(false);
-		stable.setFocusPainted(false);
-		stable.setBorderPainted(false);
-		stable.setSelected(true);
-		stable.setActionCommand(STABLE_ACTION);
-		stable.addActionListener(this);
-		group.add(stable);
-
-		beta = new JRadioButton("Always use Beta Launcher Builds");
-		beta.setBounds(10, stable.getY() + stable.getHeight() + 10, FRAME_WIDTH - 20, 20);
-		beta.setFont(minecraft);
-		beta.setForeground(Color.WHITE);
-		beta.setContentAreaFilled(false);
-		beta.setFocusPainted(false);
-		beta.setBorderPainted(false);
-		beta.setActionCommand(BETA_ACTION);
-		beta.addActionListener(this);
-		group.add(beta);
-
-		buildStream = Settings.getBuildStream();
-		if (buildStream.equals(Settings.STABLE)) {
-			stable.setSelected(true);
-		} else if (buildStream.equals(Settings.BETA)) {
-			beta.setSelected(true);
-		}
 
 		JLabel memoryLabel = new JLabel("Memoria: ");
 		memoryLabel.setFont(ubuntu);
@@ -242,8 +209,6 @@ public class LauncherOptions extends JDialog implements ActionListener, MouseLis
 
 		Container contentPane = getContentPane();
 		contentPane.add(build);
-		//contentPane.add(beta);
-		//contentPane.add(stable);
 		contentPane.add(changeFolder);
 		contentPane.add(packLocation);
 		contentPane.add(logs);

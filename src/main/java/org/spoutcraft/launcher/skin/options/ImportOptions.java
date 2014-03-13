@@ -110,7 +110,6 @@ public class ImportOptions extends JDialog implements ActionListener, MouseListe
 	}
 
 	public void initComponents() {
-		Font minecraft = LauncherFrame.getMinecraftFont(12);
 
 		KeyStroke escape = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, false);
 		Action escapeAction = new AbstractAction() {
@@ -142,16 +141,13 @@ public class ImportOptions extends JDialog implements ActionListener, MouseListe
 		msgLabel.setBounds(10, 75, FRAME_WIDTH - 20, 25);
 		msgLabel.setText("Enter your Technic Platform delivery URL below to add a new pack:");
 		msgLabel.setForeground(Color.white);
-		msgLabel.setFont(minecraft);
 
 		urlTextBox = new LiteTextBox(this, "Paste Platform URL Here");
 		urlTextBox.setBounds(10, msgLabel.getY() + msgLabel.getHeight() + 5, FRAME_WIDTH - 115, 30);
-		urlTextBox.setFont(minecraft);
 		urlTextBox.getDocument().addDocumentListener(this);
 		urlDoc = urlTextBox.getDocument();
 
 		save = new LiteButton("Add Modpack");
-		save.setFont(minecraft.deriveFont(14F));
 		save.setBounds(FRAME_WIDTH - 145, FRAME_HEIGHT - 40, 135, 30);
 		save.setActionCommand(IMPORT_ACTION);
 		save.addActionListener(this);
@@ -160,13 +156,11 @@ public class ImportOptions extends JDialog implements ActionListener, MouseListe
 		fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
 		folder = new LiteButton("Change Folder");
-		folder.setFont(minecraft.deriveFont(14F));
 		folder.setBounds(FRAME_WIDTH - 290, FRAME_HEIGHT - 40, 135, 30);
 		folder.setActionCommand(CHANGE_FOLDER);
 		folder.addActionListener(this);
 
 		paste = new LiteButton("Paste");
-		paste.setFont(minecraft.deriveFont(14F));
 		paste.setBounds(FRAME_WIDTH - 95, msgLabel.getY() + msgLabel.getHeight() + 5, 85, 30);
 		paste.setActionCommand(PASTE_URL);
 		paste.addActionListener(this);
@@ -174,7 +168,6 @@ public class ImportOptions extends JDialog implements ActionListener, MouseListe
 
 		install = new LiteTextBox(this, "");
 		install.setBounds(10, FRAME_HEIGHT - 75, FRAME_WIDTH - 20, 25);
-		install.setFont(minecraft.deriveFont(10F));
 		install.setEnabled(false);
 		install.setVisible(false);
 

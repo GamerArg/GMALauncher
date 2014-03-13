@@ -93,8 +93,6 @@ public class ModpackOptions extends JDialog implements ActionListener, MouseList
 	}
 
 	private void initComponents() {
-		Font minecraft = LauncherFrame.getMinecraftFont(12);
-
 		KeyStroke escape = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, false);
 		Action escapeAction = new AbstractAction() {
 			private static final long serialVersionUID = 1L;
@@ -119,7 +117,6 @@ public class ModpackOptions extends JDialog implements ActionListener, MouseList
 		optionsTitle.setBounds(10, 10, FRAME_WIDTH, 25);
 		optionsTitle.setText(installedPack.getDisplayName() + " Options");
 		optionsTitle.setForeground(Color.white);
-		optionsTitle.setFont(minecraft.deriveFont(14F));
 
 		ImageButton optionsQuit = new ImageButton(ResourceUtils.getIcon("quit.png", 28, 28), ResourceUtils.getIcon("quit.png", 28, 28));
 		optionsQuit.setRolloverIcon(ResourceUtils.getIcon("quitHover.png", 28, 28));
@@ -131,7 +128,6 @@ public class ModpackOptions extends JDialog implements ActionListener, MouseList
 		buildLabel.setBounds(10, 50, 140, 25);
 		buildLabel.setText("Select Build");
 		buildLabel.setForeground(Color.white);
-		buildLabel.setFont(minecraft);
 
 		buildSelector = new JComboBox();
 		buildSelector.setBounds(FRAME_WIDTH / 2, 50, 140, 25);
@@ -148,7 +144,6 @@ public class ModpackOptions extends JDialog implements ActionListener, MouseList
 
 		JRadioButton versionRec = new JRadioButton("Always use recommended builds");
 		versionRec.setBounds(10, buildLabel.getY() + buildLabel.getHeight() + 10, FRAME_WIDTH - 20, 30);
-		versionRec.setFont(minecraft);
 		versionRec.setForeground(Color.white);
 		versionRec.setContentAreaFilled(false);
 		versionRec.setActionCommand(REC_ACTION);
@@ -157,7 +152,6 @@ public class ModpackOptions extends JDialog implements ActionListener, MouseList
 
 		JRadioButton versionLatest = new JRadioButton("Always use latest builds");
 		versionLatest.setBounds(10, versionRec.getY() + versionRec.getHeight(), FRAME_WIDTH - 20, 30);
-		versionLatest.setFont(minecraft);
 		versionLatest.setForeground(Color.white);
 		versionLatest.setContentAreaFilled(false);
 		versionLatest.setActionCommand(LATEST_ACTION);
@@ -166,7 +160,6 @@ public class ModpackOptions extends JDialog implements ActionListener, MouseList
 
 		JRadioButton versionManual = new JRadioButton("Manually select a build");
 		versionManual.setBounds(10, versionLatest.getY() + versionLatest.getHeight(), FRAME_WIDTH - 20, 30);
-		versionManual.setFont(minecraft);
 		versionManual.setForeground(Color.white);
 		versionManual.setContentAreaFilled(false);
 		versionManual.setActionCommand(MANUAL_ACTION);
@@ -205,7 +198,6 @@ public class ModpackOptions extends JDialog implements ActionListener, MouseList
 
 		packLocation = new LiteTextBox(this, "");
 		packLocation.setBounds(10, versionManual.getY() + versionManual.getHeight() + 10, FRAME_WIDTH - 20, 25);
-		packLocation.setFont(minecraft.deriveFont(10F));
 		packLocation.setText(installedDirectory.getPath());
 		packLocation.setEnabled(false);
 
@@ -214,13 +206,11 @@ public class ModpackOptions extends JDialog implements ActionListener, MouseList
 
 		LiteButton changeFolder = new LiteButton("Change Folder");
 		changeFolder.setBounds(FRAME_WIDTH / 2 + 10, packLocation.getY() + packLocation.getHeight() + 10, FRAME_WIDTH / 2 - 20, 25);
-		changeFolder.setFont(minecraft);
 		changeFolder.setActionCommand(CHANGEFOLDER_ACTION);
 		changeFolder.addActionListener(this);
 
 		openFolder = new LiteButton("Open Folder");
 		openFolder.setBounds(10, packLocation.getY() + packLocation.getHeight() + 10, FRAME_WIDTH / 2 - 20, 25);
-		openFolder.setFont(minecraft);
 		openFolder.setActionCommand(OPENFOLDER_ACTION);
 		openFolder.addActionListener(this);
 
@@ -229,13 +219,11 @@ public class ModpackOptions extends JDialog implements ActionListener, MouseList
 		}
 
 		LiteButton save = new LiteButton("Save");
-		save.setFont(minecraft.deriveFont(14F));
 		save.setBounds(FRAME_WIDTH / 2 + 10, FRAME_HEIGHT - 40, FRAME_WIDTH / 2 - 20, 25);
 		save.setActionCommand(SAVE_ACTION);
 		save.addActionListener(this);
 
 		cleanBin = new LiteButton("Reset Pack");
-		cleanBin.setFont(minecraft.deriveFont(14F));
 		cleanBin.setBounds(10, FRAME_HEIGHT - 40, FRAME_WIDTH / 2 - 20, 25);
 		cleanBin.setActionCommand(CLEAN_BIN_ACTION);
 		cleanBin.addActionListener(this);

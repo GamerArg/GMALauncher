@@ -42,9 +42,7 @@ import java.util.logging.Level;
 public class NewsComponent extends JComponent {
 	private static final long serialVersionUID = 1L;
 
-	public NewsComponent() {
-		GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(LauncherFrame.getMinecraftFont(10));
-	}
+	public NewsComponent() { }
 
 	public void loadArticles() {
 		try {
