@@ -415,10 +415,10 @@ public class LauncherFrame extends JFrame implements ActionListener, KeyListener
 				int intProgress = Math.round(progress);
 				progressBar.setValue(intProgress);
 				String text = status;
-				if (text.length() > 60) {
-					text = text.substring(0, 60) + "...";
+				if (text.length() > 12) {
+					text = text.substring(0, 12);
 				}
-				progressBar.setString(intProgress + "%");
+				progressBar.setString(intProgress + "% " + text);
 			}
 		});
 	}
