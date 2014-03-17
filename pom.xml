@@ -266,8 +266,8 @@
 								<configuration>
 									<headerType>gui</headerType>
 									<stayAlive>false</stayAlive>
-									<jar>build/TechnicLauncher.jar</jar>
-									<outfile>build/TechnicLauncher.exe</outfile>
+									<jar>build/GMALauncher.jar</jar>
+									<outfile>build/GMALauncher.exe</outfile>
 									<classPath>
 										<mainClass>${mainClass}</mainClass>
 										<addDependencies>false</addDependencies>
