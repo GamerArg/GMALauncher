@@ -121,6 +121,7 @@ public class ModpackSelector extends JComponent implements ActionListener, IPack
 	}
 
 	public void redraw(InstalledPack selected, boolean force) {
+		selected.getIcon();
 		this.repaint();
 	}
 
