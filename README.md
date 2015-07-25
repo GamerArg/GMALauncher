@@ -21,4 +21,4 @@ Technic Launcher uses Maven to handle its dependencies.
 
 [Homepage]: http://www.technicpack.net
 [License]: http://www.gnu.org/licenses/gpl-3.0.txt
-[Source]: https://github.com/ramaroberto/GMALauncher
+[Source]: https://github.com/GamerArg/GMALauncher
