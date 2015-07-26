@@ -25,6 +25,7 @@ import java.util.logging.Level;
 
 import net.technicpack.launchercore.mirror.MirrorStore;
 import net.technicpack.launchercore.mirror.secure.rest.JsonWebSecureMirror;
+import net.technicpack.launchercore.restful.PlatformConstants;
 import org.spoutcraft.launcher.donor.DonorSite;
 import net.technicpack.launchercore.exception.AuthenticationNetworkFailureException;
 import net.technicpack.launchercore.install.AvailablePackList;
@@ -71,7 +72,7 @@ public class Launcher {
 		AvailablePackList packList = new AvailablePackList(installedPacks, mirrorStore);
 		userModel.addAuthListener(packList);
 
-		DonorSite donors = new DonorSite("http://gamerarg.com.ar/donar");
+		DonorSite donors = new DonorSite(PlatformConstants.DONATION_URL);
 
 		this.launcherFrame = new LauncherFrame(skinRepo, userModel, packList, donors, mirrorStore);
 		this.loginFrame = new LoginFrame(skinRepo, userModel);
@@ -124,7 +125,8 @@ public class Launcher {
 		if (!installed.exists()) {
 			try {
 				installed.createNewFile();
-				Utils.sendTracking("installLauncher", "install", SpoutcraftLauncher.getLauncherBuild());
+                //TODO: Cambiando lo siguiente se pueden trackear la cantidad de jugadores que lo utilizan
+				//Utils.sendTracking("installLauncher", "install", SpoutcraftLauncher.getLauncherBuild());
 			} catch (IOException e) {
 				e.printStackTrace();
 				Utils.getLogger().log(Level.INFO, "Failed to create install tracking file");

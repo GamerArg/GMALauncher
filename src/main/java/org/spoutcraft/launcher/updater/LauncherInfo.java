@@ -25,16 +25,14 @@ import net.technicpack.launchercore.restful.RestObject;
 public class LauncherInfo {
 
 	public static int getLatestBuild(String stream) throws RestfulAPIException{
-		//TODO: Group all the URLs.
-		//LauncherBuild result = RestObject.getRestObject(LauncherBuild.class, PlatformConstants.API + "launcher/version/" + stream);
-		LauncherBuild result = RestObject.getRestObject(LauncherBuild.class, "http://gamerarg.com.ar/MCLauncher/version.php");
+		LauncherBuild result = RestObject.getRestObject(LauncherBuild.class, PlatformConstants.VERSION);
 		return result.getLatestBuild();
 	}
 
 	public static String getDownloadURL(int version, boolean isJar) throws RestfulAPIException {
 		String ext = isJar ? "jar" : "exe";
 
-		String url = PlatformConstants.API + "launcher/url/" + version + "/" + ext;
+		String url = PlatformConstants.DOWNLOAD + version + "/" + ext;
 		LauncherURL result = RestObject.getRestObject(LauncherURL.class, url);
 		return result.getURL();
 	}
