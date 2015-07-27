@@ -15,7 +15,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<mainClass>${project.groupId}.${project.artifactId}.entrypoint.Start</mainClass>
-		<buildNumber>0</buildNumber>
+		<buildNumber>100</buildNumber>
 	</properties>
 
 	<!-- Company information -->
@@ -31,12 +31,6 @@
 		<url>https://github.com/TechnicPack/TechnicLauncher/tree/dev</url>
 	</scm>
 
-	<!-- Build server -->
-	<ciManagement>
-		<system>jenkins</system>
-		<url>http://build.technicpack.net/job/TechnicLauncher/</url>
-	</ciManagement>
-
 	<!-- Project dependencies -->
 	<dependencies>
 		<!-- Included in final JAR -->
@@ -44,18 +38,20 @@
             <groupId>net.technicpack</groupId>
             <artifactId>launchercore</artifactId>
             <version>1.0.0-SNAPSHOT</version>
-            <scope>system</scope>
-			<systemPath>${basedir}/../lib/launchercore-1.0.0.jar</systemPath>
+            <scope>compile</scope>
+			<!--<systemPath>${basedir}/../lib/launchercore-1.0.0.jar</systemPath>-->
         </dependency>
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>2.4</version>
+            <scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 			<version>2.2.4</version>
+            <scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.beust</groupId>
@@ -247,6 +243,7 @@
 	            <buildNumber>${env.BUILD_NUMBER}</buildNumber>
 	        </properties>
 	    </profile>
+
 		<!-- Package for Windows -->
 		<profile>
 			<id>package-win</id>
