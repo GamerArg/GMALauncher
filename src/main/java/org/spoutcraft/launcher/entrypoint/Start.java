@@ -50,7 +50,10 @@ public class Start {
 	}
 
 	private static void launch(String[] args) throws Exception {
-		// Text for local build (not official build)
+
+        System.out.println("Local version: " + SpoutcraftLauncher.getLauncherBuild());
+
+		// Test for local build (not official build)
 		if (SpoutcraftLauncher.getLauncherBuild().equals("0")) {
 			SpoutcraftLauncher.main(args);
 			return;
@@ -79,6 +82,7 @@ public class Start {
 		boolean update = false;
 
 		int version = Integer.parseInt(SpoutcraftLauncher.getLauncherBuild());
+        System.out.println("Server version: " + Integer.toString(version));
 		String buildStream = Settings.getBuildStream();
 		int latest = version;
 
@@ -93,6 +97,7 @@ public class Start {
 			e.printStackTrace();
 		}
 
+        System.out.println("Update: " + Boolean.toString(update));
 		if (update) {
 			File codeSource = new File(URLDecoder.decode(Start.class.getProtectionDomain().getCodeSource().getLocation().getPath(), "UTF-8"));
 			File temp;

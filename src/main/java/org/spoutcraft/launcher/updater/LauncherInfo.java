@@ -30,10 +30,12 @@ public class LauncherInfo {
 	}
 
 	public static String getDownloadURL(int version, boolean isJar) throws RestfulAPIException {
+		//TODO: Falta agregar MAC
 		String ext = isJar ? "jar" : "exe";
 
-		String url = PlatformConstants.DOWNLOAD + version + "/" + ext;
-		LauncherURL result = RestObject.getRestObject(LauncherURL.class, url);
-		return result.getURL();
+		String url = PlatformConstants.DOWNLOAD + "GMALauncher." + ext;
+		//LauncherURL result = RestObject.getRestObject(LauncherURL.class, url);
+		//return result.getURL();
+		return url;
 	}
 }
