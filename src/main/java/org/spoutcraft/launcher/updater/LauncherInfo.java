@@ -33,7 +33,7 @@ public class LauncherInfo {
 		//TODO: Falta agregar MAC
 		String ext = isJar ? "jar" : "exe";
 
-		String url = PlatformConstants.DOWNLOAD + "GMALauncher." + ext;
+		String url = PlatformConstants.DOWNLOAD + "launcher/GMALauncher." + ext;
 		//LauncherURL result = RestObject.getRestObject(LauncherURL.class, url);
 		//return result.getURL();
 		return url;
