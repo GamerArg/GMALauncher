@@ -82,7 +82,6 @@ public class Start {
 		boolean update = false;
 
 		int version = Integer.parseInt(SpoutcraftLauncher.getLauncherBuild());
-        System.out.println("Server version: " + Integer.toString(version));
 		String buildStream = Settings.getBuildStream();
 		int latest = version;
 
@@ -96,6 +95,8 @@ public class Start {
 		} catch (RestfulAPIException e) {
 			e.printStackTrace();
 		}
+
+		System.out.println("Latest version: " + Integer.toString(latest));
 
         System.out.println("Update: " + Boolean.toString(update));
 		if (update) {
@@ -114,7 +115,8 @@ public class Start {
 			}
 
 			ProgressSplashScreen splash = new ProgressSplashScreen();
-			Download download = new Download(new URL(LauncherInfo.getDownloadURL(latest, !codeSource.getName().endsWith(".exe"))), temp.getName(), temp.getPath());
+			URL download_url = new URL(LauncherInfo.getDownloadURL(latest, !codeSource.getName().endsWith(".exe")));
+			Download download = new Download(download_url, temp.getName(), temp.getPath());
 			download.setListener(new LauncherDownloadListener(splash));
 			download.run();
 
