@@ -87,9 +87,7 @@ public class Start {
 
 		try {
 			latest = LauncherInfo.getLatestBuild(buildStream);
-			if (buildStream.equals("beta") && version < latest) {
-				update = true;
-			} else if (buildStream.equals("stable") && version != latest) {
+			if (version < latest) {
 				update = true;
 			}
 		} catch (RestfulAPIException e) {
