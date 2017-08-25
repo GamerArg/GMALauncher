@@ -1,5 +1,5 @@
 #!/bin/bash
-export BUILD_NUMBER=101
+export BUILD_NUMBER=103
 
 cd ../GMALauncherCore/
 mvn clean install
