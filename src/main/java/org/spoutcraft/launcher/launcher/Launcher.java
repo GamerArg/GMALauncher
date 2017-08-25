@@ -54,7 +54,7 @@ public class Launcher {
 
 	public Launcher() {
 		if (Launcher.instance != null) {
-			throw new IllegalArgumentException("No puedes tener dos launchers abiertos!");
+			throw new IllegalArgumentException("No puedes tener dos lanzadores abiertos!");
 		}
 
         userModel = new UserModel(Users.load());
